@@ -20,7 +20,7 @@
 #### Download and execute the script:
 
 ```bash
-$ wget https://github.com/tmiland/openssl-autoinstall/blob/master/openssl-autoinstall.sh
+$ wget https://raw.githubusercontent.com/tmiland/openssl-autoinstall/master/openssl-autoinstall.sh
 $ chmod +x openssl-autoinstall.sh
 $ ./openssl-autoinstall.sh
 ```

@@ -1,40 +1,59 @@
-# The OpenSSL Universal Binary Installer
+# OpenSSL AutoInstall
 
-My goal is to provide an automatic way of building OpenSSL from source.
-Compiling from source made easy!
-If you need the latest version of OpenSSL just run this automatic bash script.
-Build latest OpenSSL Universal Binary on UNIX systems.
+```
+                  ╔═══════════════════════════════════════════════════════════════════╗
+                  ║                        OpenSSL AutoInstall                        ║
+                  ║                Automatic install script for OpenSSL               ║
+                  ║                      Maintained by @tmiland                       ║
+                  ╚═══════════════════════════════════════════════════════════════════╝
+```
 
-## Features of the OpenSSL Universal Binary Installer
+## Automatic install script for OpenSSL
 
-*   Useful comments included in the bash script (Main installer)
-*   **Checks if you are running a 32-Bit or 64-Bit system** If you are on a 32-Bit it will compile native 32-bit code and the same goes for 64-Bit.
-*   **After installation it will removes all unnecessary files**
-*	Automatic way for UNIX Systems (OS X, Ubuntu and any other Linux distribution)
-*   Downloads from source, so you are always up-to-date
-*   Dynamic Loading of Object files(on some architecture)
-*   Highly customisable
+* Install OpenSSL from source
 
-## How to get the OpenSSL Universal Binary Installer
+## Installation
 
-If you are using git and properly you do, otherwise you wouldn't be here :)
-Then use the following command:
+#### Download and execute the script:
 
-	$ git clone git://github.com/Remzi1993/openssl-installer.git
+```bash
+$ wget https://github.com/tmiland/openssl-autoinstall/blob/master/openssl-autoinstall.sh
+$ chmod +x openssl-autoinstall.sh
+$ ./openssl-autoinstall.sh
+```
 
-## Quick install?
+***Note: you will be prompted to enter root password***
 
-You are just a user who wants to install or update OpenSSL quickly?
-Just run the following command:
+If root password is not set, type:
 
-	$ sudo OpenSSL-installer.sh
+```bash
+$ sudo passwd root
+```
+## Compatibility and Requirements
 
-## The Author
+* Debian 8 and later
+* 
+## Credits
 
-OpenSSL Universal Binary Installer was originally developed by an internet guy tmiz.
-Now I want to provide UNIX systems an easy way of downloading, compiling, installing and updating OpenSSL.
+Forked from [Remzi1993/openssl-installer](https://github.com/Remzi1993/openssl-installer)
 
-Website: http://remzi.info
-Twitter: https://twitter.com/remzicavdar
+## Donations 
+- [PayPal me](https://paypal.me/milanddata)
+- [BTC] : 3MV69DmhzCqwUnbryeHrKDQxBaM724iJC2
+- [BCH] : qznnyvpxym7a8he2ps9m6l44s373fecfnv86h2vwq2
 
-<mailto:ict@remzi.info>
+## Web Hosting
+
+Sign up for web hosting using this link, and receive $100 in credit over 60 days.
+
+[DigitalOcean](https://m.do.co/c/f1f2b475fca0)
+
+#### Disclaimer 
+
+*** ***Use at own risk*** ***
+
+### License
+
+[![MIT License Image](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/MIT_logo.svg/220px-MIT_logo.svg.png)](https://github.com/tmiland/openssl-autoinstall/blob/master/LICENSE)
+
+[MIT License](https://github.com/tmiland/openssl-autoinstall/blob/master/LICENSE)

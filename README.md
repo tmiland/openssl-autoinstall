@@ -34,7 +34,8 @@ $ sudo passwd root
 ```
 ## Compatibility and Requirements
 
-* Debian 8 and later
+* Debian
+* Ubuntu
 
 
 ## Credits

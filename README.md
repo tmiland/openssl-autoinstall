@@ -7,6 +7,9 @@
                   ║                      Maintained by @tmiland                       ║
                   ╚═══════════════════════════════════════════════════════════════════╝
 ```
+[![GitHub release](https://img.shields.io/github/release/tmiland/openssl-autoinstall.svg?style=for-the-badge)](https://github.com/tmiland/openssl-autoinstall/releases)
+[![licence](https://img.shields.io/github/license/tmiland/openssl-autoinstall.svg?style=for-the-badge)](https://github.com/tmiland/openssl-autoinstall/blob/master/LICENSE)
+![Bash](https://img.shields.io/badge/Language-SH-4EAA25.svg?style=for-the-badge)
 
 ## Automatic install script for OpenSSL
 

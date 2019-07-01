@@ -56,6 +56,21 @@ chk_permissions() {
   fi
 }
 
+if [[ $(lsb_release -si) == "Debian" || $(lsb_release -si) == "Ubuntu" ]]; then
+  export DEBIAN_FRONTEND=noninteractive
+  SUDO="sudo"
+  UPDATE="apt-get -o Dpkg::Progress-Fancy="1" update -qq"
+  INSTALL="apt-get -o Dpkg::Progress-Fancy="1" install -qq"
+  PKGCHK="dpkg -s"
+  # Pre-install packages
+  PRE_INSTALL_PKGS="apt-transport-https git curl sudo"
+  # Build-dep packages
+  BUILD_DEP_PKGS="build-essential ca-certificates wget libssl-dev libpcre3 libpcre3-dev autoconf unzip automake libtool tar zlib1g-dev uuid-dev lsb-release make"
+else
+  echo -e "${RED}${ERROR} Error: Sorry, your OS is not supported.${NC}"
+  exit 1;
+fi
+
 # Detect absolute and full path as well as filename of this script
 cd "$(dirname $0)"
 CURRDIR=$(pwd)
@@ -103,59 +118,63 @@ header() {
 }
 
 main() {
+  if [[ $(lsb_release -si) == "Debian" || $(lsb_release -si) == "Ubuntu" ]]; then
 
-  chk_permissions
-  # Switch to /usr/local/src and download the source package.
-  cd /usr/local/src
-  wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz
+    # Setup Dependencies
+    if ! ${PKGCHK} $PRE_INSTALL_PKGS >/dev/null 2>&1; then
+      ${UPDATE}
+      for i in $PRE_INSTALL_PKGS; do
+        ${INSTALL} $i 2> /dev/null
+      done
+    fi
 
-  # Extract the archive and move into the folder.
-  tar -xvzf openssl-${OPENSSL_VERSION}.tar.gz
-  cd openssl-${OPENSSL_VERSION}
+    if ! ${PKGCHK} $BUILD_DEP_PKGS >/dev/null 2>&1; then
+      ${SUDO} ${UPDATE}
+      for i in $BUILD_DEP_PKGS; do
+        ${SUDO} ${INSTALL} $i 2> /dev/null # || exit 1 #--allow-unauthenticated
+      done
+    fi
 
-  sudo ./config --prefix=/usr/local/openssl-${OPENSSL_VERSION} --openssldir=/usr/local/openssl-${OPENSSL_VERSION}
-  sudo make
-  # Continue with install only if test succeeds
-  make test && sudo make install
+    chk_permissions
+    # Switch to /usr/local/src and download the source package.
+    cd /usr/local/src
+    wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz
 
-  # # We need to check what kind of system you are running, 32-Bit or 64-Bit.
-  # if $(uname -m | grep '64'); then
-  # 	# Configure, compile and install into /usr/local/openssl-${OPENSSL_VERSION}
-  # 	# This is done so that you could have multiple installations on your system.
-  # 	sudo ./configure darwin64-x86_64-cc --prefix=/usr/local/openssl-${OPENSSL_VERSION}
-  # 	sudo make
-  # 	sudo make install
-  # else
-  # 	# If you are on a 32-Bit system we are doing this below.
-  # 	sudo ./configure darwin-i386-cc --prefix=/usr/local/openssl-${OPENSSL_VERSION}
-  # 	sudo make
-  # 	sudo make install
-  # fi
+    # Extract the archive and move into the folder.
+    tar -xvzf openssl-${OPENSSL_VERSION}.tar.gz
+    cd openssl-${OPENSSL_VERSION}
 
+    ${SUDO} ./config --prefix=/usr/local/openssl-${OPENSSL_VERSION} --openssldir=/usr/local/openssl-${OPENSSL_VERSION}
+    make
+    # Continue with install only if test succeeds
+    make test && ${SUDO} make install
 
-  # Create a symbolic link that points /usr/local/openssl to /usr/local/openssl-${OPENSSL_VERSION}
-  # This need to be done and if you have more than one installation of OpenSSL on your system you could easily switch just create a symbolic link.
-  sudo ln -s openssl-${OPENSSL_VERSION} /usr/local/openssl
+    # Create a symbolic link that points /usr/local/openssl to /usr/local/openssl-${OPENSSL_VERSION}
+    # This need to be done and if you have more than one installation of OpenSSL on your system you could easily switch just create a symbolic link.
+    ${SUDO} ln -s openssl-${OPENSSL_VERSION} /usr/local/openssl
 
-  # Execute the following lines to update your Bash startup script.
-  echo 'export PATH=/usr/local/openssl/bin:$PATH' >> ~/.bash_profile
-  echo 'export MANPATH=/usr/local/openssl/ssl/man:$MANPATH' >> ~/.bash_profile
-  echo 'export LD_LIBRARY_PATH=/usr/local/openssl/lib' >> ~/.bash_profile
+    # Execute the following lines to update your Bash startup script.
+    echo 'export PATH=/usr/local/openssl/bin:$PATH' >> ~/.bash_profile
+    echo 'export MANPATH=/usr/local/openssl/ssl/man:$MANPATH' >> ~/.bash_profile
+    echo 'export LD_LIBRARY_PATH=/usr/local/openssl/lib' >> ~/.bash_profile
 
+    # Load the new shell configurations.
+    source ~/.bash_profile
 
-  # Load the new shell configurations.
-  source ~/.bash_profile
+    # Execute the following lines to install the certificates.
+    # ${SUDO} security find-certificate -a -p /Library/Keychains/System.keychain > /usr/local/openssl/ssl/cert.pem
+    # ${SUDO} security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain >> /usr/local/openssl/ssl/cert.pem
 
-
-  # Execute the following lines to install the certificates.
-  # sudo security find-certificate -a -p /Library/Keychains/System.keychain > /usr/local/openssl/ssl/cert.pem
-  # sudo security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain >> /usr/local/openssl/ssl/cert.pem
-
-
-  # We will also remove any remaining garbage on your system.
-  cd /usr/local/src
-  sudo rm openssl-${OPENSSL_VERSION}.tar.gz
-  sudo rm -rf openssl-${OPENSSL_VERSION}
+    # Take out the garbage
+    cd /usr/local/src
+    ${SUDO} rm openssl-${OPENSSL_VERSION}.tar.gz
+    ${SUDO} rm -rf openssl-${OPENSSL_VERSION}
+    echo -e "${GREEN}${DONE} OpenSSL has been successfully installed!${NC}"
+    openssl version -a
+  else
+    echo -e "${RED}${ERROR} Error: Sorry, your OS is not supported.${NC}"
+    exit 1;
+  fi
 }
 header
 main $@

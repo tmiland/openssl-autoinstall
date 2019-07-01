@@ -32,7 +32,8 @@ $ sudo passwd root
 ## Compatibility and Requirements
 
 * Debian 8 and later
-* 
+
+
 ## Credits
 
 Forked from [Remzi1993/openssl-installer](https://github.com/Remzi1993/openssl-installer)

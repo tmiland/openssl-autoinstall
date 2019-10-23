@@ -94,7 +94,7 @@ REPO_NAME="tmiland/openssl-autoinstall"
 # Script name
 SCRIPT_NAME="openssl-autoinstall.sh"
 # If you want to download a new version just change the OpenSSL version below.
-OPENSSL_VERSION="1.1.1c"
+OPENSSL_VERSION="1.1.1d"
 # Set update check
 UPDATE_SCRIPT="check"
 

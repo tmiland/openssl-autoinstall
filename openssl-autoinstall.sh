@@ -331,7 +331,7 @@ main() {
 
       # Create a symbolic link that points /usr/local/openssl to /usr/local/openssl-${OPENSSL_VERSION}
       # This need to be done and if you have more than one installation of OpenSSL on your system you could easily switch just create a symbolic link.
-      ${SUDO} ln -s openssl-${OPENSSL_VERSION} /usr/local/openssl
+      ${SUDO} ln -sfT openssl-${OPENSSL_VERSION} /usr/local/openssl
 
       # Execute the following lines to update your Bash startup script.
       echo 'export PATH=/usr/local/openssl/bin:$PATH' >> ~/.bash_profile
